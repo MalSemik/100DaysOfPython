@@ -1,34 +1,13 @@
 MENU = {
-    "espresso": {
-        "ingredients": {
-            "water": 50,
-            "coffee": 18,
-        },
-        "cost": 1.5,
-    },
-    "latte": {
-        "ingredients": {
-            "water": 200,
-            "milk": 150,
-            "coffee": 24,
-        },
-        "cost": 2.5,
-    },
+    "espresso": {"ingredients": {"water": 50, "coffee": 18}, "cost": 1.5},
+    "latte": {"ingredients": {"water": 200, "milk": 150, "coffee": 24}, "cost": 2.5},
     "cappuccino": {
-        "ingredients": {
-            "water": 250,
-            "milk": 100,
-            "coffee": 24,
-        },
+        "ingredients": {"water": 250, "milk": 100, "coffee": 24},
         "cost": 3.0,
-    }
+    },
 }
 
-resources = {
-    "water": 300,
-    "milk": 200,
-    "coffee": 100,
-}
+resources = {"water": 300, "milk": 200, "coffee": 100}
 
 
 class CoffeeMachine:
@@ -37,18 +16,23 @@ class CoffeeMachine:
         self.profit = 0
 
     def _print_report(self):
-        print(f"""
+        print(
+            f"""
         Water: {self.resources["water"]}ml
         Milk: {self.resources["milk"]}ml
         Coffee: {self.resources["coffee"]}g
         Money: ${self.profit}
-        """)
+        """
+        )
 
     def _turn_off(self):
         print("The coffee machine will now switch off.")
 
     def _check_resources(self, order):
-        if self.resources["water"] >= MENU[order]["ingredients"]["water"] and self.resources["coffee"] >= MENU[order]["ingredients"]["coffee"]:
+        if (
+            self.resources["water"] >= MENU[order]["ingredients"]["water"]
+            and self.resources["coffee"] >= MENU[order]["ingredients"]["coffee"]
+        ):
             if "milk" in MENU[order]["ingredients"].keys():
                 if self.resources["milk"] >= MENU[order]["ingredients"]["milk"]:
                     return True
