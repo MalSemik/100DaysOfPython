@@ -26,7 +26,7 @@ class CoffeeMachine:
         )
 
     def _turn_off(self):
-        print("The coffee machine will now switch off.")
+        print("The coffee machine will now turn off.")
 
     def _check_resources(self, order):
         if (
@@ -41,7 +41,6 @@ class CoffeeMachine:
         return False
 
     def _accept_coins(self):
-        "quarters = $0.25, dimes = $0.10, nickles = $0.05, pennies = $0.01"
         num_quarters = int(input("How many quarters? "))
         num_dimes = int(input("How many dimes? "))
         num_nickles = int(input("How many nickles? "))
@@ -58,6 +57,13 @@ class CoffeeMachine:
             self.profit += MENU[order]["cost"]
             return True
 
+    def _new_order(self):
+        new_order = input("Would you like to make another order? Type 'y' or 'n': ")
+        if new_order == "y":
+            self.get_order()
+        else:
+            self._turn_off()
+
     def _make_coffee(self, order):
         print(f"Making {order} in progress...")
         self.resources["water"] -= MENU[order]["ingredients"]["water"]
@@ -66,16 +72,13 @@ class CoffeeMachine:
             self.resources["milk"] -= MENU[order]["ingredients"]["milk"]
 
         print("Your coffee is done. Please collect your order.")
-        new_order = input("Would you like to make another order? Type 'y' or 'n': ")
-        if new_order == "y":
-            self.get_order()
-        else:
-            self._turn_off()
+        self._new_order()
 
     def get_order(self):
         order = input("What would you like? (espresso/latte/cappuccino): ")
         if order == "report":
             self._print_report()
+            self._new_order()
         elif order == "off":
             self._turn_off()
         elif order in ["espresso", "latte", "cappuccino"]:
@@ -84,8 +87,10 @@ class CoffeeMachine:
                     self._make_coffee(order)
                 else:
                     print("Not enough money.")
+                    self._new_order()
             else:
                 print("Not enough resources.")
+                self._turn_off()
         else:
             print("Incorrect choice")
             self.get_order()
