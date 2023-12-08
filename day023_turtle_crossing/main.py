@@ -45,8 +45,7 @@ while game_is_on:
             car.reset_position()
 
         # detect collision with car:
-        # if player.distance(car) < 15:
-        #     scoreboard.game_over()
-        #     game_is_on = False
-        # TODO: speed cars up
+        if player.distance(car) < 15:
+            scoreboard.game_over()
+            game_is_on = False
 screen.exitonclick()
