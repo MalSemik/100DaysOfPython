@@ -26,3 +26,6 @@ class Player(Turtle):
     def go_right(self):
         self.goto(self.xcor()+10, self.ycor())
 
+    def reset_position(self):
+        self.goto(STARTING_POSITION)
+
