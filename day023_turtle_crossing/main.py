@@ -6,6 +6,9 @@ from car_manager import CarManager
 from scoreboard import Scoreboard
 
 
+def play_again():
+    return True
+
 screen = Screen()
 screen.setup(width=600, height=600)
 screen.bgcolor("grey")
@@ -42,8 +45,8 @@ while game_is_on:
             car.reset_position()
 
         # detect collision with car:
-        if player.distance(car) < 15:
-            scoreboard.game_over()
-            game_is_on = False
+        # if player.distance(car) < 15:
+        #     scoreboard.game_over()
+        #     game_is_on = False
         # TODO: speed cars up
 screen.exitonclick()
