@@ -9,6 +9,8 @@ SECONDARY_FONT = ("Arial", 40, "italic")
 FROM_LANGUAGE = "French"
 TO_LANGUAGE = "English"
 
+learned = []
+to_learn = []
 # Read csv data
 df = pd.read_csv("data/french_words.csv")
 words_to_learn = df.to_dict(orient="records")
@@ -25,13 +27,14 @@ def get_next_flashcard(words_to_learn):
 
 
 def new_word():
+    global flashcard, word, translation
     flashcard, word, translation = get_next_flashcard(words_to_learn)
     canvas.itemconfig(card_title, text=FROM_LANGUAGE)
     canvas.itemconfig(card_word, text=word)
     canvas.itemconfig(card_background, image=card_front_img)
 
 
-def show_translation():
+def show_translation(event):
     title = canvas.itemcget(card_title, "text")
     if title == FROM_LANGUAGE:
         canvas.itemconfig(card_title, text=TO_LANGUAGE)
@@ -44,13 +47,19 @@ def show_translation():
 
 
 def guessed_right():
+    learned.append(flashcard)
+    words_to_learn.remove(flashcard)
+    data = pd.DataFrame(learned)
+    data.to_csv("data/french_words_2.csv", index=False)
     new_word()
-    pass
-    # learned.append(word)
-    # # words.remove(word)
-    # new_word()
-#
-#
+
+
+def guessed_wrong():
+    to_learn.append(flashcard)
+    data = pd.DataFrame(to_learn)
+    data.to_csv("data/to_learn.csv", index=False)
+    new_word()
+
 # # Create UI
 window = Tk()
 window.title("Fiszkowo")
@@ -67,9 +76,9 @@ card_word = canvas.create_text(400, 263, text=word, font=MAIN_FONT)
 canvas.config(bg=BACKGROUND_COLOR, highlightthickness=0)
 canvas.grid(row=0, column=0, columnspan=2)
 
-canvas.tag_bind(card_background, '<Button-1>', lambda e: show_translation())
+canvas.bind('<Button-1>', show_translation)
 cross_image = PhotoImage(file="images/wrong.png")
-unknown_button = Button(image=cross_image, highlightthickness=0, command=sum)
+unknown_button = Button(image=cross_image, highlightthickness=0, command=guessed_wrong)
 unknown_button.grid(row=1, column=0)
 
 check_image = PhotoImage(file="images/right.png")
